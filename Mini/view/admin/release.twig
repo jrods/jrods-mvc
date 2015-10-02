@@ -1,0 +1,18 @@
+{% extends "admin/_admin.base.twig" %}
+{% block content %}
+
+<div class="container">
+	<h2>Add a External Release</h2>
+	<form action="/admin/release/add" method="POST">
+		<input type="text" name="ext_release[title]" value="" placeholder="title" required />
+		<input type="text" name="ext_release[location]" value="" placeholder="location" required />
+		<input type="text" name="ext_release[url]" value="" placeholder="url" />
+		<input type="text" name="ext_release[type]" value="" placeholder="type" required />
+		<input type="text" name="ext_release[excerpt]" value="" placeholder="summary" />
+		<input type="text" name="ext_release[description]" value="" placeholder="description" />
+
+		<input type="submit" value="Add" />
+	</form>
+</div>
+
+{% endblock %}

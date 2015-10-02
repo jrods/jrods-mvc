@@ -1,0 +1,7 @@
+.idea
+*.sublime-*
+
+Mini/etc/db_config.php
+vendor
+composer.*
+!composer.json

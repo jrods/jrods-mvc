@@ -1,0 +1,32 @@
+{% extends "admin/_admin.base.twig" %}
+{% block content %}
+
+<section>
+	<h2>All Releases</h2>
+	<table>
+		<thead>
+			<tr>
+				<td>title </td>
+				<td>location </td>
+				<td>url </td>
+				<td>type </td>
+				<td>excerpt </td>
+				<td>description </td>
+			</tr>
+		</thead>
+		<tbody>
+		{% for release in releases %}
+			<tr>
+				<td>{{ release.title }}</td>
+				<td>{{ release.location }}</td>
+				<td>{{ release.url }}</td>
+				<td>{{ release.type }}</td>
+				<td>{{ release.excerpt }}</td>
+				<td>{{ release.description }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</section>
+
+{% endblock %}

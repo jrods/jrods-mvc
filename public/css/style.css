@@ -1,0 +1,92 @@
+/* Main
+**************************************/
+
+html, body, h1, h2 {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    font-size: 1rem;
+}
+body {
+    overflow-x: hidden;
+    color: #fff;
+}
+body {
+    background-image: url('/img/cover.jpg');
+    background-attachment: fixed;
+    background-color: #111;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% auto;
+}
+
+h1, h2 {
+    font-family: 'Fira Sans';
+    font-weight: 200;
+    color: #fff;
+}
+h1 {
+    font-size: 4em;
+}
+h2 {
+    font-size: 1.7em;
+}
+
+ul, li {
+    display: inline-block;
+    list-style: none;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 1000px;
+    width: 90%;
+    box-sizing: border-box;
+}
+/*
+header {
+    position: sticky;
+    top: 0;
+}
+*/
+header {
+    background: linear-gradient(0deg, rgba(0,0,0,0), rgba(0,0,0,1) 80%);
+}
+.flexing {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+header #title {
+    padding: 3vh 3vw;
+}
+nav {
+    font-family: 'Fira Sans';
+}
+nav ul {
+    padding: 0 0 0 3vw;
+}
+nav li {
+    padding: 0 12px 0 0;
+}
+nav li {
+    font-size: 1.5em;
+    font-weight: 400;
+}
+
+#main {
+    min-height: 64vh;
+}
+
+footer {
+
+}
+footer {
+    background: linear-gradient(0deg, rgba(0,0,0,1), rgba(0,0,0,0));
+}
+footer div {
+    padding: 5vh 5vw;
+}

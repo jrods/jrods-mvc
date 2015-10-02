@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Young God</title>
+
+	<meta charset="UTF-8" />
+	<meta name="description" content="">
+
+	<link id="yg-style" media="all" type="text/css" href="/css/style.css" rel="stylesheet"></link>
+	<link id="fonts" media="all" type="text/css" href="/css/fonts.css" rel="stylesheet"></link>
+
+	<script id="stickyElement" src="/js/lib/sticky-element-0.5.js" type="text/javascript"></script>
+	<script id="yg-main-js" src="/js/main.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+	<div id="wrap">
+		<header class="flexing">
+			<div id="title" >
+				<h1>Young God</h1>
+				<h2>of Blue Sky Black Death</h2>
+			</div>
+
+			<nav >
+				<ul>
+					{% include "base/nav.twig" %}
+				</ul>
+			</nav>
+		</header>
+
+		<div id="main">
+
+			{% block content %} {% endblock %}
+
+			{% include 'login.twig' %}
+
+		</div>
+
+		<footer>
+			<div>
+			<p>&copy; 2015 by Ian Taggart & Jared R. Smith</p>
+			</div>		
+		</footer>
+    </div>
+
+</body>
+</html>
