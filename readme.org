@@ -2,11 +2,12 @@
 #+Author: Jared Smith
 #+Email: jared.smith.jrod@gmail.com
 
+* Info
+Base on [[https://github.com/panique/mini2]]. There's a couple of structure changes I've made from Mini2. I separated the database code from the Model class. This was done to allow for a single db connection among multiple classes that would need db access, eg User class. Now if any new classes are made, they can, essentially, store a pointer to the db object as a member variable.
+
 * DO NOT use for production
 I haven't defined the security model yet (user authentication, authorization, and secure sessions), it's still a work in progress
 
-* Info
-Base on [[https://github.com/panique/mini2]]. There's a couple of structure changes I've made from Mini2. I separated the database code from the Model class. This was done to allow for a single db connection among multiple classes that would need db access, eg User class. Now if any new classes are made, they can, essentially, store a pointer to the db object as a member variable.
 * Tech
 - nginx, apache, lighttpd or any web server that supports fcgi
 - PHP 5.3+
@@ -38,15 +39,16 @@ Base on [[https://github.com/panique/mini2]]. There's a couple of structure chan
    1. Do not use your MySQL root account to access the db in the project.
 
 * Install
-1. Clone the repo to your desired location: =git clone https://github.com/jrods/jrods-mvc.git=
+1. Clone the repo: =git clone https://github.com/jrods/jrods-mvc.git=
 2. Install composer: https://getcomposer.org/doc/00-intro.md
-   1. Install dependencies: =php composer.phar install= (command depends on composer installation)
-3. Add the =jrods-mvc/public= directory location to the public root var in your http server config
+   1. Install dependencies: =php composer.phar install= (cmd depends on your installation)
+3. Add the =jrods-mvc/public= directory path to the root var in your http server config
 4. Run the =jrods/etc/db_setup.sql= script to setup the db:
    1. =​mysql -h "localhost"= -u "root" "-p" < "jrods-mvc/jrods/etc/db_setup.sql"​= (correct the script path as needed)
-5. Make a copy of =jrods-mvc/jrods/etc/db_config.php.example= file (in the same directory): =cp db_config.php.example db_config.php=
+5. Copy the =jrods-mvc/jrods/etc/db_config.php.example= file (in the same directory): =cp db_config.php.example db_config.php=
    1. Add your database credentials in the =db_config.php= file
    2. Change the permissions of =db_config.php=, to allow only the user running php-fpm with read access: =chmod 400 db_config.php=
-6. Open your web browser and access the index url according to you http server configs
+6. Open your web browser to check if you can acces the public url according to your http server configs
 7. Fin
+
 
