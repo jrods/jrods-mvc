@@ -5,7 +5,7 @@ namespace jrods\Model;
 class Model {
 	/**
 	 * The database connection
-	 * @var PDO
+	 * @var $db
 	 */
 	private $db;
 
@@ -13,8 +13,8 @@ class Model {
 	 * When creating the model, the configs for database connection creation are needed
 	 * @param $config
 	 */
-	function __construct($db) {
-		$this->db = $db;
+	function __construct(&$db) {
+		$this->db =& $db;
 	}
 
 	public function getNavBar() {

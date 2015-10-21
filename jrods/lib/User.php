@@ -11,8 +11,8 @@ class User {
 
 	private $data;
 
-	function __construct($db, $session = []) {
-		$this->db = $db;
+	function __construct(&$db, $session = []) {
+		$this->db =& $db;
 
 		$this->data = new \stdClass();
 
