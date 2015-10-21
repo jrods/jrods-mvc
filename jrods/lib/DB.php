@@ -1,6 +1,6 @@
 <?php 
 
-namespace Mini\lib;
+namespace jrods\lib;
 
 use PDO;
 

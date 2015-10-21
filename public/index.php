@@ -1,29 +1,25 @@
 <?php
 
-/******************************* LOADING & INITIALIZING BASE APPLICATION ****************************************/
-
+/* LOADING & INITIALIZING BASE APPLICATION 
+*******************************************************/
 // Configuration for error reporting, useful to show every little problem during development
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-// Load Composer's PSR-4 autoloader (necessary to load Slim, Mini etc.)
 require '../vendor/autoload.php';
 
-$app = new \Slim\Slim();
+$slim = new \Slim\Slim();
 
-$app->view = new \Slim\Views\Twig();
-$app->view->setTemplatesDirectory("../Mini/view");
+$slim->view = new \Slim\Views\Twig();
+$slim->view->setTemplatesDirectory("../jrods/view");
 
 /* CONFIGS 
 *******************************************************/
+require '../jrods/etc/db_config.php';
 
-require '../Mini/etc/db_config.php';
+$slim->configureMode('development', function () use ($slim) {
 
-// Configs for mode "development" (Slim's default), see the GitHub readme for details on setting the environment
-$app->configureMode('development', function () use ($app) {
-
-	// pre-application hook, performs stuff before real action happens @see http://docs.slimframework.com/#Hooks
-	$app->hook('slim.before', function () use ($app) {
+	$slim->hook('slim.before', function () use ($slim) {
 
 		// SASS-to-CSS compiler @see https://github.com/panique/php-sass
 		//SassCompiler::run("scss/", "css/");
@@ -38,7 +34,7 @@ $app->configureMode('development', function () use ($app) {
 		//$minifier->minify('js/application.minified.js');
 	});
 
-	$app->config([
+	$slim->config([
 		'debug' => true,
 		'database' => [
 			'db_host' => DB_HOST,
@@ -50,52 +46,55 @@ $app->configureMode('development', function () use ($app) {
 	]);
 });
 
-$db = \Mini\lib\DB::createDB($app->config('database'));
-
 /* THE MODEL 
 *******************************************************/
-$model = new \Mini\Model\Model($db);
-$user = new \Mini\lib\User($db);
+$db = \jrods\lib\DB::createDB($slim->config('database'));
 
+$model = new \jrods\Model\Model($db);
+$user = new \jrods\lib\User($db);
 
 /* THE ROUTES / CONTROLLERS 
 *******************************************************/
 // Index
-$app->get('/', function () use ($app, $model) {
+$slim->get('/', function () use ($slim, $model) {
 	$testing = ['asdf' => "hello"];
-	$app->render('base/index.twig', ['test' => $testing]);
+	$slim->render('base/index.twig', ['test' => $testing]);
 });
 
-$app->post('/login', function () use ($app, $model) {
-	$app->render('not_secure.twig', ["login" => $_POST['login'] ]);
+$slim->post('/login', function () use ($slim, $model) {
+	$slim->render('not_secure.twig', ["login" => $_POST['login'] ]);
 });
 
 // About
-$app->group('/about', function () use ($app, $model) {
-	$app->get('/', function () use ($app, $model) {
-		$app->render('base/about.twig');
+$slim->group('/about', function () use ($slim, $model) {
+	$slim->get('/', function () use ($slim, $model) {
+		$slim->render('base/about.twig');
 	});
 
 });
 
-// Admin
-$app->group('/admin', function () use ($app, $model) {
+$slim->get('/phpinfo', function () {
+	echo phpinfo();
+});
 
-	$app->get('/', function () use ($app, $model) {
+// Admin
+$slim->group('/admin', function () use ($slim, $model) {
+
+	$slim->get('/', function () use ($slim, $model) {
 		$input = ['releases' => $model->getAllReleases()];
 		
-		$app->render('admin/admin.index.twig', $input);
+		$slim->render('admin/admin.index.twig', $input);
 	});
 
-	$app->group('/release', function () use ($app, $model) {
+	$slim->group('/release', function () use ($slim, $model) {
 
-		$app->get('/', function () use ($app, $model) {
-			$app->render('admin/release.twig');
+		$slim->get('/', function () use ($slim, $model) {
+			$slim->render('admin/release.twig');
 		});
 
-		$app->post('/add', function () use ($app, $model) {
+		$slim->post('/add', function () use ($slim, $model) {
 			$model->addRelease($_POST["ext_release"]);
-			$app->redirect('/admin');
+			$slim->redirect('/admin');
 		});
 
 	});
@@ -103,4 +102,4 @@ $app->group('/admin', function () use ($app, $model) {
 
 /* Run
 *******************************************************/
-$app->run();
+$slim->run();

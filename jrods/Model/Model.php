@@ -1,8 +1,6 @@
 <?php
 
-namespace Mini\Model;
-
-use PDO;
+namespace jrods\Model;
 
 class Model {
 	/**
