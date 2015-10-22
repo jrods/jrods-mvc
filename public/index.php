@@ -73,10 +73,6 @@ $slim->group('/about', function () use ($slim, $model) {
 
 });
 
-$slim->get('/phpinfo', function () {
-	echo phpinfo();
-});
-
 // Admin
 $slim->group('/admin', function () use ($slim, $model) {
 

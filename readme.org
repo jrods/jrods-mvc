@@ -10,7 +10,7 @@ I haven't defined the security model yet (user authentication, authorization, an
 
 * Tech
 - nginx, apache, lighttpd or any web server that supports fcgi
-- PHP 5.3+
+- PHP 5.4+
   - Slim Framework v2.5
     - will move to v3.0 when released
     - straight forward to use for routing and view integration

@@ -1,6 +1,8 @@
 .idea
 *.sublime-*
 
+/certs/
+
 jrods/etc/db_config.php
 vendor
 composer.*
