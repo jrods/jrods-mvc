@@ -13,7 +13,7 @@ class Model {
 	 * When creating the model, the configs for database connection creation are needed
 	 * @param $config
 	 */
-	function __construct(&$db) {
+	function __construct($db) {
 		$this->db =& $db;
 	}
 

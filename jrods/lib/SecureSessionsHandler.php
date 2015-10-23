@@ -7,13 +7,13 @@ class SecureSessionHandler extends SessionHandler {
 	protected $key, $name, $cookie;
 
 	public function __construct($key, $name = 'MY_SESSION', $cookie = []) {
-		$this->key = $key;
-		$this->name = $name;
+		$this->key    = $key;
+		$this->name   = $name;
 		$this->cookie = $cookie;
 
 		$this->cookie += [
 			'lifetime' => 0,
-			'path'     => ini_get('session.cookie_path'),
+			//'path'     => ini_get('session.cookie_path'), won't use default path, will check for path availablity in setup()
 			'domain'   => ini_get('session.cookie_domain'),
 			'secure'   => isset($_SERVER['HTTPS']),
 			'httponly' => true
@@ -26,15 +26,24 @@ class SecureSessionHandler extends SessionHandler {
 		ini_set('session.use_cookies', 1);
 		ini_set('session.use_only_cookies', 1);
 
-		session_name($this->name);
+		// TODO: check for session cookie path from constructor, won't use php.ini session.cookie_path
+
+		session_name($this->name);		
 
 		session_set_cookie_params(
-			$this->cookie['lifetime'], $this->cookie['path'],
-			$this->cookie['domain'], $this->cookie['secure'],
+			$this->cookie['lifetime'], 
+			$this->cookie['path'],
+			$this->cookie['domain'], 
+			$this->cookie['secure'],
 			$this->cookie['httponly']
 		);
 	}
 
+	/**
+	 *	TODO: need to explain what and why for start() 
+	 * 
+	 * 
+	 */
 	public function start() {
 		if ( version_compare(phpversion(), '5.4.0', '>=') ) {
 			if (session_status() === PHP_SESSION_ACTIVE) {
@@ -69,9 +78,13 @@ class SecureSessionHandler extends SessionHandler {
 		$_SESSION = [];
 
 		setcookie(
-			$this->name, '', time() - 42000,
-			$this->cookie['path'], $this->cookie['domain'],
-			$this->cookie['secure'], $this->cookie['httponly']
+			$this->name, 
+			'', 
+			time() - 42000,
+			$this->cookie['path'], 
+			$this->cookie['domain'],
+			$this->cookie['secure'], 
+			$this->cookie['httponly']
 		);
 
 		return session_destroy();
@@ -81,18 +94,20 @@ class SecureSessionHandler extends SessionHandler {
 		return session_regenerate_id(true);
 	}
 
+	/* Will change read() and write() to use AES and CBC
 	public function read($id) {
 		return mcrypt_decrypt(MCRYPT_3DES, $this->key, parent::read($id), MCRYPT_MODE_ECB);
 	}
+	*/
 
+	/*
 	public function write($id, $data) {
 		return parent::write($id, mcrypt_encrypt(MCRYPT_3DES, $this->key, $data, MCRYPT_MODE_ECB));
 	}
+	*/
 
 	public function isExpired($ttl = 30) {
-		$activity = isset($_SESSION['_last_activity'])
-			? $_SESSION['_last_activity']
-			: false;
+		$activity = isset($_SESSION['_last_activity']) ? $_SESSION['_last_activity'] : false;
 
 		if ($activity !== false && time() - $activity > $ttl * 60) {
 			return true;
@@ -121,43 +136,7 @@ class SecureSessionHandler extends SessionHandler {
 	*/
 
 	public function isValid($ttl = 30) {
-		return ! $this->isExpired($ttl) && $this->isFingerprint();
-	}
-
-	public function get($name) {
-		$parsed = explode('.', $name);
-
-		$result = $_SESSION;
-
-		while ($parsed) {
-			$next = array_shift($parsed);
-
-			if (isset($result[$next])) {
-				$result = $result[$next];
-			} else {
-				return null;
-			}
-		}
-
-		return $result;
-	}
-
-	public function put($name, $value) {
-		$parsed = explode('.', $name);
-
-		$session =& $_SESSION;
-
-		while (count($parsed) > 1) {
-			$next = array_shift($parsed);
-
-			if ( ! isset($session[$next]) || ! is_array($session[$next])) {
-				$session[$next] = [];
-			}
-
-			$session =& $session[$next];
-		}
-
-		$session[array_shift($parsed)] = $value;
+		return ! $this->isExpired($ttl); //&& $this->isFingerprint();
 	}	
 
 }
