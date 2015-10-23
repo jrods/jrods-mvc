@@ -26,6 +26,8 @@ class User {
 
 		$_POST['username'] = '';
 		$_POST['password'] = '';
+		unset($_POST['username']);
+		unset($_POST['password']);
 
 	}
 

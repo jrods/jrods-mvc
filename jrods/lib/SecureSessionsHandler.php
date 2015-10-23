@@ -4,11 +4,24 @@ namespace jrods\lib;
 
 class SecureSessionHandler extends SessionHandler {
 
-	protected $key, $name, $cookie;
+	protected $key, $name, $cookie, $iv, 
 
-	public function __construct($key, $name = 'MY_SESSION', $cookie = []) {
+	protected $algo = OPENSSL_CIPHER_AES_128_CBC;
+	protected $auth = OPENSSL_KEYTYPE_EC;
+
+	public function __construct($key, $cookie = []) {
+
+		if ( !extension_loaded('openssl') ) {
+			throw new Exception('Openssl Module is not loaded, SecureSessionsHandler will not be made.');
+			return null;
+		}  
+		if (OPENSSL_VERSION_NUMBER < 268439663) {
+			throw new Exception('Openssl Version is too old, please update your openssl to a newer version');
+			return null;
+		}
+
 		$this->key    = $key;
-		$this->name   = $name;
+		//$this->name   = $name;
 		$this->cookie = $cookie;
 
 		$this->cookie += [
@@ -94,7 +107,8 @@ class SecureSessionHandler extends SessionHandler {
 		return session_regenerate_id(true);
 	}
 
-	/* Will change read() and write() to use AES and CBC
+	/* Mcrypt is too old, didn't realize it hasn't been updated for awhile,
+	 * will switch to using the openssl library
 	public function read($id) {
 		return mcrypt_decrypt(MCRYPT_3DES, $this->key, parent::read($id), MCRYPT_MODE_ECB);
 	}
